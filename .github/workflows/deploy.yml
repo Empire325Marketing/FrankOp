@@ -20,6 +20,8 @@ jobs:
           username: root
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            whoami
-            uptime
-            ls -la /root/
+           cd /opt/frank_core
+            git pull origin main
+            source venv/bin/activate
+            pkill -f uvicorn || true
+            nohup uvicorn main_control_hub:app --host 0.0.0.0 --port 1337 > app.log 2>&1 &
