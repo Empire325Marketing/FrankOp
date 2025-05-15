@@ -15,20 +15,10 @@ jobs:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.1.0
         with:
-          host: ${{ 145.223.73.4
- }}
-          username: ${{ root
- }}
-          key: ${{ -----BEGIN OPENSSH PRIVATE KEY-----
-b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
-QyNTUxOQAAACChR2YuXbRhkmkpSkpC3qvEMVP2hcyyPwPFqLhSf6Mv4QAAAJg2GBi3NhgY
-twAAAAtzc2gtZWQyNTUxOQAAACChR2YuXbRhkmkpSkpC3qvEMVP2hcyyPwPFqLhSf6Mv4Q
-AAAEDEKbgqtaIVbpBehMCQUlRDp3JLkukYkPtIudQMIVdVQKFHZi5dtGGSaSlKSkLeq8Qx
-U/aFzLI/A8WouFJ/oy/hAAAADnJvb3RAc3J2ODAzNDk1AQIDBAUGBw==
------END OPENSSH PRIVATE KEY-----
- }}
-          port: ${{ 22
- }}
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.PORT }}
           script: |
             cd /opt/frank_core
             git pull origin main
