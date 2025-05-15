@@ -1,4 +1,4 @@
-name: Deploy to FrankCore Server
+name: SSH Deploy
 
 on:
   push:
@@ -8,22 +8,22 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repository
+      - name: Checkout
         uses: actions/checkout@v3
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.1.0
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
+          host: 145.223.73.4
+          username: root
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.PORT }}
           script: |
-cd /opt/frank_core
-
+                      cd /opt/frank_core
             git pull origin main
             source venv/bin/activate
             pkill -f uvicorn || true
-            nohup uvicorn main_control_hub:app --host 0.0.0.0 --port 1337 > app.log 2>&1 &
+            nohup uvicorn main_control_hub:app --host 0.0.0.0 --port 1337 > app.log 2>&1 
+            whoami
+            uptime
+            ls -la /root/
