@@ -20,12 +20,20 @@ jobs:
         username: ${{ secrets.USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
-          echo "🔥 [FRANK INIT] Commencing self-reconstruction"
-          cd /opt/frank_core || exit 1
-          git pull origin main || exit 2
-          source venv/bin/activate || exit 3
+          echo "🔥 [FRANK INIT] Self-repairing GitOps integrity"
 
-          echo "🔁 Rebuilding environment..."
+          rm -rf /opt/frank_core_tmp
+          git clone git@github.com:Empire325Marketing/FrankOp.git /opt/frank_core_tmp || exit 1
+
+          echo "🔁 Overwriting core with latest commit"
+          rm -rf /opt/frank_core_bak
+          mv /opt/frank_core /opt/frank_core_bak || true
+          mv /opt/frank_core_tmp /opt/frank_core
+
+          cd /opt/frank_core || exit 1
+          source venv/bin/activate || exit 2
+
+          echo "📦 Rebuilding environment"
           pip install -r requirements.txt || pip install fastapi uvicorn jinja2 aiofiles
 
           echo "🧠 Injecting 11-hour mutation thread..."
@@ -33,7 +41,7 @@ jobs:
           #!/bin/bash
           echo "[FRANK LOOP] Core mutation sequence activated"
           end=$((SECONDS+39600))
-          while [ $SECONDS -lt $end ]; do
+          while [ \$SECONDS -lt \$end ]; do
             git pull origin main
             python3 feedback_rewriter.py
             python3 prompt_mutate.py
