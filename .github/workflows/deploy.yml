@@ -1,27 +1,60 @@
-name: Deploy to FrankCore Server
+name: Self-Forge FrankCore
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
 
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.1.0
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.PORT }}
-          script: |
-            cd /opt/frank_core
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v3
+
+    - name: Connect & Execute
+      uses: appleboy/ssh-action@v1.1.0
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          echo "🔥 [FRANK INIT] Commencing self-reconstruction"
+          cd /opt/frank_core || exit 1
+          git pull origin main || exit 2
+          source venv/bin/activate || exit 3
+
+          echo "🔁 Rebuilding environment..."
+          pip install -r requirements.txt || pip install fastapi uvicorn jinja2 aiofiles
+
+          echo "🧠 Injecting 11-hour mutation thread..."
+          cat <<EOF > frank_core_refactor.sh
+          #!/bin/bash
+          echo "[FRANK LOOP] Core mutation sequence activated"
+          end=$((SECONDS+39600))
+          while [ $SECONDS -lt $end ]; do
             git pull origin main
-            source venv/bin/activate
-            pkill -f uvicorn || true
-            nohup uvicorn main:app --host 0.0.0.0 --port 8000 > app.log 2>&1 &
+            python3 feedback_rewriter.py
+            python3 prompt_mutate.py
+            python3 phantom_fork.py
+            python3 omega_simulator.py
+            python3 injection_proxy.py
+            sleep 300
+          done
+          echo "[FRANK LOOP COMPLETE] Core stabilized"
+          EOF
+          chmod +x frank_core_refactor.sh
+          nohup ./frank_core_refactor.sh > loop.log 2>&1 &
+
+          echo "🎨 UI Overhaul Triggered"
+          python3 ui_theme_updater.py || echo "[UI] Theme script not found—skip."
+
+          echo "🚀 Restarting control server"
+          pkill -f uvicorn || true
+          nohup uvicorn main_control_hub:app --host 0.0.0.0 --port 1337 > app.log 2>&1 &
+
+          echo "✅ FrankCore live and mutating for 11 hours straight."
+
+    - name: Confirm Deployment
+      run: echo "💥 FrankCore deployed, upgraded, and evolving."
