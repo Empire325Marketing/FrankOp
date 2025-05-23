@@ -24,6 +24,11 @@ Deploy Filebeat configuration and configure Fluent Bit HTTP input:
 scripts/deploy_filebeat.py
 ```
 
+Recover Filebeat registry corruption and redeploy across all nodes:
+```bash
+scripts/recover_and_deploy.py
+```
+
 Check health of each node and the core container:
 ```bash
 scripts/healthcheck.sh
