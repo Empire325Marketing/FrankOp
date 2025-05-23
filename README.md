@@ -53,3 +53,26 @@ Run an end-to-end test to confirm log forwarding:
 ```bash
 scripts/e2e_test.py
 ```
+
+## Reverse SSH tunnel setup
+
+To aggregate logs from remote VPS nodes using reverse SSH tunnels:
+
+1. On the RunPod container, start the tunnel manager which listens on
+   ports 5045-5049 and aggregates all logs to `/tmp/vps_combined.log`:
+
+```bash
+scripts/runpod_tunnel_manager.sh
+```
+
+2. On each VPS node, establish a persistent tunnel using `autossh`.
+   Specify the remote port assigned to the node when invoking the
+   setup script. Example for port 5045:
+
+```bash
+scripts/vps_tunnel_setup.sh 5045
+```
+
+Filebeat on the VPS should be configured with
+`filebeat/filebeat_tunnel.yml` so that logs are sent through the local
+port `5044` into the SSH tunnel.

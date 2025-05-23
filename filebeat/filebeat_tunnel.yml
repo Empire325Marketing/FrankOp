@@ -1,0 +1,24 @@
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/syslog
+
+# Send to local tunnel which forwards to RunPod
+output.http:
+  hosts: ["localhost:5044"]
+  ssl.enabled: false
+  max_retries: 3
+  timeout: 30
+  compression_level: 0
+
+# Use memory queue to avoid spool corruption/restarts
+queue.mem:
+  events: 4096
+  flush.min_events: 512
+  flush.timeout: 5s
+
+logging.level: error
+logging.to_files: false
+path.data: /var/lib/filebeat
+path.logs: /var/log/filebeat
