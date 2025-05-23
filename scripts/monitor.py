@@ -9,7 +9,6 @@ SSH_USER = os.getenv("SSH_USER", "root")
 SSH_PASSWORD = os.getenv("SSH_PASSWORD", "SDAasdsa23..dsS")
 
 NODES = [
-    "145.223.73.4",
     "31.97.13.92",
     "31.97.13.95",
     "31.97.13.100",

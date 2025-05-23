@@ -10,8 +10,8 @@ SSH_PASSWORD = os.getenv("SSH_PASSWORD", "SDAasdsa23..dsS")
 FILEBEAT_CONFIG = Path(__file__).resolve().parents[1] / "filebeat" / "corrected_filebeat.yml"
 FLUENT_BIT_CONFIG = Path(__file__).resolve().parents[1] / "fluent-bit" / "fluent-bit.conf"
 
+# Worker nodes only; logs are forwarded to 145.223.73.4
 NODES = [
-    "145.223.73.4",
     "31.97.13.92",
     "31.97.13.95",
     "31.97.13.100",
@@ -64,11 +64,14 @@ def scp_file(host: str, source: Path, dest: str):
 
 def deploy_filebeat(node: str):
     log(f"Deploying Filebeat to {node}")
+    ssh_cmd(node, "systemctl stop filebeat || true")
+    ssh_cmd(node, "rm -rf /var/lib/filebeat/registry")
     backup_cmd = "cp /etc/filebeat/filebeat.yml /etc/filebeat/filebeat.yml.bak.$(date +%s) || true"
     ssh_cmd(node, backup_cmd)
     scp_file(node, FILEBEAT_CONFIG, "/tmp/filebeat.yml")
     ssh_cmd(node, "mv /tmp/filebeat.yml /etc/filebeat/filebeat.yml")
-    ssh_cmd(node, "systemctl restart filebeat")
+    ssh_cmd(node, "systemctl daemon-reload")
+    ssh_cmd(node, "systemctl start filebeat")
     status = ssh_cmd(node, "systemctl is-active filebeat")
     log(f"Filebeat status on {node}: {status.strip()}")
 

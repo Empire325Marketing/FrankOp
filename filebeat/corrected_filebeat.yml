@@ -4,16 +4,9 @@ filebeat.inputs:
     paths:
       - /var/log/test.log
 
-# WORKING: Using Elasticsearch output (NOT tcp!)
-output.elasticsearch:
-  hosts: ["104.255.9.187:5044"]
-  protocol: "http"
-  path: "/"
-  index: ""
-  bulk_max_size: 1
-  username: ""
-  password: ""
-  ssl.enabled: false
+# Forward logs to Fluent Bit over HTTP
+output.http:
+  url: "http://145.223.73.4:5044"
   max_retries: 0
   timeout: 30
 
