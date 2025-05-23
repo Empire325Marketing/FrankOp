@@ -11,14 +11,12 @@ FILEBEAT_CONFIG = Path(__file__).resolve().parents[1] / "filebeat" / "corrected_
 FLUENT_BIT_CONFIG = Path(__file__).resolve().parents[1] / "fluent-bit" / "fluent-bit.conf"
 
 NODES = [
-    "145.223.73.4",
     "31.97.13.92",
     "31.97.13.95",
     "31.97.13.100",
     "31.97.13.102",
 ]
-CORE_VPS = "104.255.9.187"
-CONTAINER = "d82c6a1a4730"
+CORE_VPS = "145.223.73.4"
 
 
 def log(msg: str):
@@ -75,12 +73,13 @@ def deploy_filebeat(node: str):
 
 def configure_fluentbit():
     log("Configuring Fluent Bit on core VPS")
-    backup_cmd = "cp /fluent-bit/etc/fluent-bit.conf /fluent-bit/etc/fluent-bit.conf.bak.$(date +%s)"
+    backup_cmd = "cp /etc/fluent-bit/fluent-bit.conf /etc/fluent-bit/fluent-bit.conf.bak.$(date +%s) || true"
     ssh_cmd(CORE_VPS, backup_cmd)
     scp_file(CORE_VPS, FLUENT_BIT_CONFIG, "/tmp/fluent-bit.conf")
-    ssh_cmd(CORE_VPS, f"docker cp /tmp/fluent-bit.conf {CONTAINER}:/fluent-bit/etc/fluent-bit.conf")
-    ssh_cmd(CORE_VPS, f"docker exec {CONTAINER} pkill -f fluent-bit || true")
-    ssh_cmd(CORE_VPS, f"docker exec -d {CONTAINER} /fluent-bit/bin/fluent-bit -c /fluent-bit/etc/fluent-bit.conf")
+    ssh_cmd(CORE_VPS, "mv /tmp/fluent-bit.conf /etc/fluent-bit/fluent-bit.conf")
+    ssh_cmd(CORE_VPS, "systemctl daemon-reload")
+    ssh_cmd(CORE_VPS, "systemctl enable fluent-bit")
+    ssh_cmd(CORE_VPS, "systemctl restart fluent-bit")
     log("Fluent Bit configuration updated")
 
 

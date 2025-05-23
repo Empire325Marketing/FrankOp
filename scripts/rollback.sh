@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-NODES=(srv803495 srv832635 srv832638 srv832660 srv832662)
-CORE_VPS=104.255.9.187
-CONTAINER=d82c6a1a4730
+NODES=(31.97.13.92 31.97.13.95 31.97.13.100 31.97.13.102)
+CORE_VPS=145.223.73.4
 BACKUP_DIR=/var/backups/fluent-bit
 
 log() {
@@ -20,6 +19,6 @@ for NODE in "${NODES[@]}"; do
   log "Rollback completed on ${NODE}"
 done
 
-log "Rolling back configuration on core container"
-ssh "$CORE_VPS" "docker cp ${CONTAINER}:${BACKUP_DIR}/fluent-bit.conf /tmp/fluent-bit.conf && docker exec ${CONTAINER} /fluent-bit/bin/fluent-bit -c /tmp/fluent-bit.conf"
+log "Rolling back configuration on core VPS"
+ssh "$CORE_VPS" "LATEST=\$(ls -t ${BACKUP_DIR}/fluent-bit.conf.* 2>/dev/null | head -n 1); if [ -n \"$LATEST\" ]; then sudo cp \"$LATEST\" /etc/fluent-bit/fluent-bit.conf && sudo systemctl restart fluent-bit; fi"
 log "Rollback finished"

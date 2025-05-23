@@ -10,14 +10,12 @@ SSH_USER = os.getenv("SSH_USER", "root")
 SSH_PASSWORD = os.getenv("SSH_PASSWORD", "SDAasdsa23..dsS")
 
 NODES = [
-    "145.223.73.4",
     "31.97.13.92",
     "31.97.13.95",
     "31.97.13.100",
     "31.97.13.102",
 ]
-CORE_VPS = "104.255.9.187"
-CONTAINER = "d82c6a1a4730"
+CORE_VPS = "145.223.73.4"
 
 FILEBEAT_CONFIG = Path(__file__).resolve().parents[1] / "filebeat" / "corrected_filebeat.yml"
 FLUENT_BIT_CONFIG = Path(__file__).resolve().parents[1] / "fluent-bit" / "fluent-bit.conf"
@@ -99,17 +97,18 @@ def recover_node(node: str) -> None:
 
 def configure_fluentbit() -> None:
     log("Configuring Fluent Bit on core VPS")
-    ssh_cmd(CORE_VPS, "cp /fluent-bit/etc/fluent-bit.conf /fluent-bit/etc/fluent-bit.conf.bak.$(date +%s)")
+    ssh_cmd(CORE_VPS, "cp /etc/fluent-bit/fluent-bit.conf /etc/fluent-bit/fluent-bit.conf.bak.$(date +%s) || true")
     scp_file(CORE_VPS, FLUENT_BIT_CONFIG, "/tmp/fluent-bit.conf")
-    ssh_cmd(CORE_VPS, f"docker cp /tmp/fluent-bit.conf {CONTAINER}:/fluent-bit/etc/fluent-bit.conf")
-    ssh_cmd(CORE_VPS, f"docker exec {CONTAINER} pkill -f fluent-bit || true")
-    ssh_cmd(CORE_VPS, f"docker exec -d {CONTAINER} /fluent-bit/bin/fluent-bit -c /fluent-bit/etc/fluent-bit.conf")
+    ssh_cmd(CORE_VPS, "mv /tmp/fluent-bit.conf /etc/fluent-bit/fluent-bit.conf")
+    ssh_cmd(CORE_VPS, "systemctl daemon-reload")
+    ssh_cmd(CORE_VPS, "systemctl enable fluent-bit")
+    ssh_cmd(CORE_VPS, "systemctl restart fluent-bit")
     log("Fluent Bit restarted")
 
 
 def verify_logs() -> None:
     log("Verifying combined logs on core VPS")
-    log_data = ssh_cmd(CORE_VPS, "cat /tmp/fb_combined.log || true")
+    log_data = ssh_cmd(CORE_VPS, "cat /tmp/vps_combined.log || true")
     for node in NODES:
         if node in log_data:
             log(f"Log entry from {node} detected")

@@ -1,22 +1,25 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-NODES=(srv803495 srv832635 srv832638 srv832660 srv832662)
-CORE_VPS=104.255.9.187
-CONTAINER=d82c6a1a4730
-PORT=8000
+NODES=(31.97.13.92 31.97.13.95 31.97.13.100 31.97.13.102)
+CORE_VPS=145.223.73.4
+PORT=5044
 
 log() {
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*"
 }
 
 for NODE in "${NODES[@]}"; do
-  if nc -z "$NODE" "$PORT"; then
-    log "${NODE} Fluent Bit port ${PORT} reachable"
+  if ssh "$NODE" "systemctl is-active filebeat >/dev/null"; then
+    log "${NODE} filebeat active"
   else
-    log "ERROR: ${NODE} Fluent Bit port ${PORT} unreachable"
+    log "ERROR: ${NODE} filebeat inactive"
   fi
- done
+done
 
-log "Checking container health"
-ssh "$CORE_VPS" "docker exec ${CONTAINER} curl -sf http://localhost:${PORT}/health" && log "Container healthy" || log "ERROR: Container health check failed"
+log "Checking Fluent Bit port on core VPS"
+if nc -z "$CORE_VPS" "$PORT"; then
+  log "Core VPS port ${PORT} reachable"
+else
+  log "ERROR: Core VPS port ${PORT} unreachable"
+fi
