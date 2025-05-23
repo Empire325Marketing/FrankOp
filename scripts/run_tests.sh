@@ -20,4 +20,14 @@ if command -v fluent-bit >/dev/null 2>&1; then
 else
   log "Fluent Bit not installed; skipping configuration validation"
 fi
+
+log "Validating Python scripts"
+python3 -m py_compile scripts/deploy_filebeat.py
+
+if command -v filebeat >/dev/null 2>&1; then
+  log "Validating Filebeat configuration"
+  filebeat test config -c filebeat/corrected_filebeat.yml
+else
+  log "Filebeat not installed; skipping configuration validation"
+fi
 log "Tests completed"
