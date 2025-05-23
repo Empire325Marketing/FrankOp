@@ -48,3 +48,8 @@ If deployment fails, rollback to previous configuration:
 ```bash
 scripts/rollback.sh
 ```
+
+Run an end-to-end test to confirm log forwarding:
+```bash
+scripts/e2e_test.py
+```
