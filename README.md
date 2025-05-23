@@ -14,6 +14,11 @@ Run automated tests:
 scripts/run_tests.sh
 ```
 
+Install Fluent Bit on the central VPS:
+```bash
+scripts/install_fluentbit.sh
+```
+
 Deploy configuration to all nodes:
 ```bash
 scripts/deploy.sh
@@ -34,7 +39,7 @@ Run a one-shot health check and rotate the combined log if it grows too large:
 scripts/monitor.py
 ```
 
-Check health of each node and the core container:
+Check health of each node and the core VPS:
 ```bash
 scripts/healthcheck.sh
 ```
