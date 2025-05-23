@@ -16,7 +16,7 @@ NODES = [
     "31.97.13.102",
 ]
 CORE_VPS = "104.255.9.187"
-LOG_PATH = "/tmp/fb_combined.log"
+LOG_PATH = "/tmp/vps_combined.log"
 THRESHOLD = 5_000_000  # rotate log above 5MB
 
 

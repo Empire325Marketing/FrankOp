@@ -109,7 +109,7 @@ def configure_fluentbit() -> None:
 
 def verify_logs() -> None:
     log("Verifying combined logs on core VPS")
-    log_data = ssh_cmd(CORE_VPS, "cat /tmp/fb_combined.log || true")
+    log_data = ssh_cmd(CORE_VPS, "cat /tmp/vps_combined.log || true")
     for node in NODES:
         if node in log_data:
             log(f"Log entry from {node} detected")

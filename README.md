@@ -39,6 +39,11 @@ Check health of each node and the core container:
 scripts/healthcheck.sh
 ```
 
+Install Fluent Bit on a central VPS and deploy the configuration:
+```bash
+scripts/install_fluentbit.sh
+```
+
 If deployment fails, rollback to previous configuration:
 ```bash
 scripts/rollback.sh
