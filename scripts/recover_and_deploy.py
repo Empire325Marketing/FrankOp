@@ -65,20 +65,36 @@ def scp_file(host: str, source: Path, dest: str) -> None:
 
 
 def recover_node(node: str) -> None:
+    """Recover Filebeat on a single node and deploy configuration."""
     log(f"Starting recovery on {node}")
+    # Stop service and disable to clear systemd throttling
     ssh_cmd(node, "systemctl stop filebeat || true")
+    ssh_cmd(node, "systemctl disable filebeat || true")
     ssh_cmd(node, "systemctl reset-failed filebeat || true")
+
+    # Remove registry and lock files
     ssh_cmd(node, "rm -rf /var/lib/filebeat/registry")
+    ssh_cmd(node, "rm -f /var/lib/filebeat/filebeat.lock")
+
+    # Recreate directory structure with root ownership
     ssh_cmd(node, "mkdir -p /var/lib/filebeat /var/log/filebeat")
     ssh_cmd(node, "chown -R root:root /var/lib/filebeat /var/log/filebeat")
+
+    # Backup existing configuration before deploying new one
+    ssh_cmd(node, "cp /etc/filebeat/filebeat.yml /etc/filebeat/filebeat.yml.bak.$(date +%s) || true")
+
     scp_file(node, FILEBEAT_CONFIG, "/tmp/filebeat.yml")
     ssh_cmd(node, "mv /tmp/filebeat.yml /etc/filebeat/filebeat.yml")
     ssh_cmd(node, "systemctl daemon-reload")
     ssh_cmd(node, "systemctl enable filebeat")
     ssh_cmd(node, "systemctl start filebeat")
+
+    # Verify service health
     status = ssh_cmd(node, "systemctl is-active filebeat").strip()
     log(f"Filebeat status on {node}: {status}")
-    ssh_cmd(node, "echo \"$(date -u +%Y-%m-%dT%H:%M:%SZ) recovery test\" >> /var/log/test.log")
+
+    # Generate a test log line to trigger forwarding
+    ssh_cmd(node, f"echo \"$(date -u +%Y-%m-%dT%H:%M:%SZ) recovery test from {node}\" >> /var/log/test.log")
 
 
 def configure_fluentbit() -> None:
@@ -93,8 +109,12 @@ def configure_fluentbit() -> None:
 
 def verify_logs() -> None:
     log("Verifying combined logs on core VPS")
-    output = ssh_cmd(CORE_VPS, "tail -n 5 /tmp/fb_combined.log || true")
-    log(output)
+    log_data = ssh_cmd(CORE_VPS, "cat /tmp/fb_combined.log || true")
+    for node in NODES:
+        if node in log_data:
+            log(f"Log entry from {node} detected")
+        else:
+            log(f"WARNING: no log entry from {node}")
 
 
 def main() -> None:
@@ -102,13 +122,24 @@ def main() -> None:
         log(f"Missing Filebeat configuration: {FILEBEAT_CONFIG}")
         raise SystemExit(1)
 
+    results: dict[str, str] = {}
     with ThreadPoolExecutor(max_workers=len(NODES)) as exe:
-        futures = [exe.submit(recover_node, n) for n in NODES]
+        futures = {exe.submit(recover_node, n): n for n in NODES}
         for fut in as_completed(futures):
-            fut.result()
+            node = futures[fut]
+            try:
+                fut.result()
+                results[node] = "success"
+            except Exception as exc:
+                results[node] = f"error: {exc}"
 
     configure_fluentbit()
     verify_logs()
+
+    log("Summary:")
+    for node, res in results.items():
+        log(f"  {node}: {res}")
+
     log("Recovery and deployment complete")
 
 

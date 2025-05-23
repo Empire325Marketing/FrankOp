@@ -29,6 +29,11 @@ Recover Filebeat registry corruption and redeploy across all nodes:
 scripts/recover_and_deploy.py
 ```
 
+Run a one-shot health check and rotate the combined log if it grows too large:
+```bash
+scripts/monitor.py
+```
+
 Check health of each node and the core container:
 ```bash
 scripts/healthcheck.sh
