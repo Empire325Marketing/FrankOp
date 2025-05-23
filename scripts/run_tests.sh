@@ -22,7 +22,7 @@ else
 fi
 
 log "Validating Python scripts"
-python3 -m py_compile scripts/deploy_filebeat.py scripts/recover_and_deploy.py scripts/monitor.py scripts/e2e_test.py
+python3 -m py_compile scripts/deploy_filebeat.py scripts/recover_and_deploy.py scripts/monitor.py scripts/e2e_test.py trinity_ai.py
 
 if command -v filebeat >/dev/null 2>&1; then
   log "Validating Filebeat configuration"

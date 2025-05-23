@@ -76,3 +76,20 @@ scripts/vps_tunnel_setup.sh 5045
 Filebeat on the VPS should be configured with
 `filebeat/filebeat_tunnel.yml` so that logs are sent through the local
 port `5044` into the SSH tunnel.
+
+## Trinity AI Integration
+
+`trinity_ai.py` provides a unified Python interface to three AI backends:
+
+- **ChatGPT** via the standard OpenAI API.
+- **Gemini** via an OpenAI-compatible endpoint (`https://generativelanguage.googleapis.com/v1beta/openai/`).
+- **OpenEvolve** for GitHub workflow automation (placeholder implementation).
+
+Example usage:
+
+```bash
+python3 trinity_ai.py
+```
+
+The script will read API keys from the environment variables `OPENAI_API_KEY`,
+`GEMINI_API_KEY`, and `OPENEVOLVE_TOKEN`.
