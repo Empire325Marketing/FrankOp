@@ -129,4 +129,6 @@ A minimal web interface is provided as a starting point for the future
    ```
 
 The frontend will send chat prompts to `http://localhost:8000/api/chat` and
-display the result.
+display the result. The root path redirects to `/login`, which prompts for the
+`PINARCH_TOKEN` (default `DSFSfdss22$24@21--sdfsfsdf2442442`). After a valid
+login, the Trinity AI dashboard is available at `/dashboard`.
