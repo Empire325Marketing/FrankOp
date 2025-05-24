@@ -2,4 +2,6 @@
 set -euo pipefail
 
 # Launch the production Trinity AI API using Gunicorn.
-exec gunicorn --bind 0.0.0.0:5001 --workers 4 app:app
+BIND_ADDR="${BIND_ADDR:-0.0.0.0}" 
+BIND_PORT="${BIND_PORT:-5001}"
+exec gunicorn --bind "${BIND_ADDR}:${BIND_PORT}" --workers 4 app:app

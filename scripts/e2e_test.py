@@ -9,14 +9,11 @@ from datetime import datetime
 SSH_USER = os.getenv("SSH_USER", "root")
 SSH_PASSWORD = os.getenv("SSH_PASSWORD", "SDAasdsa23..dsS")
 
-NODES = [
-    "145.223.73.4",
-    "31.97.13.92",
-    "31.97.13.95",
-    "31.97.13.100",
-    "31.97.13.102",
-]
-CORE_VPS = "104.255.9.187"
+NODES = os.getenv(
+    "NODES",
+    "145.223.73.4,31.97.13.92,31.97.13.95,31.97.13.100,31.97.13.102",
+).split(",")
+CORE_VPS = os.getenv("CORE_VPS", "104.255.9.187")
 LOG_PATH = "/tmp/fb_combined.log"
 
 
