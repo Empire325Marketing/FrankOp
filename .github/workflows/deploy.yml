@@ -32,37 +32,14 @@ jobs:
 
           cd /opt/james_core || exit 1
           source venv/bin/activate || exit 2
-
           echo "📦 Rebuilding environment"
           pip install -r requirements.txt || pip install fastapi uvicorn jinja2 aiofiles
 
-          echo "🧠 Injecting 11-hour mutation thread..."
-          cat <<EOF > james_core_refactor.sh
-          #!/bin/bash
-          echo "[JAMES LOOP] Core mutation sequence activated"
-          end=$((SECONDS+39600))
-          while [ \$SECONDS -lt \$end ]; do
-            git pull origin main
-            python3 feedback_rewriter.py
-            python3 prompt_mutate.py
-            python3 phantom_fork.py
-            python3 omega_simulator.py
-            python3 injection_proxy.py
-            sleep 300
-          done
-          echo "[JAMES LOOP COMPLETE] Core stabilized"
-          EOF
-          chmod +x james_core_refactor.sh
-          nohup ./james_core_refactor.sh > loop.log 2>&1 &
-
           echo "🎨 UI Overhaul Triggered"
           python3 .github/workflows/ui_theme_updater.yml || echo "[UI] Theme script not found—skip."
-
           echo "🚀 Restarting control server"
           pkill -f uvicorn || true
           nohup uvicorn main_control_hub:app --host 0.0.0.0 --port 1337 > app.log 2>&1 &
-
-          echo "✅ JamesCore live and mutating for 11 hours straight."
-
+          echo "✅ JamesCore deployment complete."
     - name: Confirm Deployment
       run: echo "💥 JamesCore deployed, upgraded, and evolving."
