@@ -128,5 +128,5 @@ A minimal web interface is provided as a starting point for the future
    npm run dev
    ```
 
-The frontend will send chat prompts to `http://localhost:8000/api/chat` and
+The frontend will send chat prompts to `http://localhost:5001/api/chat` and
 display the result.
