@@ -176,11 +176,24 @@ resides in `var/www/html/james/ultimate_ui/`.
    ```bash
    scripts/start_trinity_server.sh
    ```
-3. In the `var/www/html/james/ultimate_ui/` directory install dependencies and run the dev server:
+3. In the `var/www/html/james/ultimate_ui/` directory install dependencies:
    ```bash
    npm install
+   ```
+   During development run:
+   ```bash
    npm run dev
    ```
 
-The frontend will send chat prompts to `http://localhost:5001/api/chat` and
-display the result.
+4. To build and serve the UI in production, execute:
+   ```bash
+   NODE_OPTIONS=--max-old-space-size=4096 npm run build
+   npm run start
+   ```
+   Or simply run the helper script from the repository root:
+   ```bash
+   scripts/start_trinity_frontend.sh
+   ```
+
+   The frontend will send chat prompts to `http://localhost:5001/api/chat` and
+   display the result.
