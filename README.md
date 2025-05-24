@@ -93,3 +93,14 @@ python3 trinity_ai.py
 
 The script will read API keys from the environment variables `OPENAI_API_KEY`,
 `GEMINI_API_KEY`, and `OPENEVOLVE_TOKEN`.
+
+## Enabling External Access
+
+The `scripts/enable_external_access.sh` helper configures firewall rules and updates the default Nginx site so the Trinity AI web interface can be reached from the internet.
+Run it on the target VPS with root privileges after deployment:
+
+```bash
+sudo scripts/enable_external_access.sh
+```
+
+This script enables ports 80 and 443 via `ufw` and `iptables`, ensures Nginx listens on all interfaces, and reloads the server.
