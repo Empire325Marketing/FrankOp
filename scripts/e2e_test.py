@@ -5,17 +5,37 @@ import subprocess
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
+from pathlib import Path
 
 SSH_USER = os.getenv("SSH_USER", "root")
 SSH_PASSWORD = os.getenv("SSH_PASSWORD")
 if not SSH_PASSWORD:
     raise RuntimeError("SSH_PASSWORD environment variable not set")
 
-NODES = os.getenv(
-    "NODES",
-    "31.97.13.92,31.97.13.95,31.97.13.100,31.97.13.102,31.97.13.104,31.97.13.106",
-).split(",")
-CORE_VPS = os.getenv("CORE_VPS", "104.255.9.187")
+def load_addresses() -> None:
+    """Populate NODES and CORE_VPS from a config file if unset."""
+    if os.getenv("NODES") and os.getenv("CORE_VPS"):
+        return
+    env_file = Path(__file__).resolve().parents[1] / "etc" / "addresses.env"
+    if env_file.exists():
+        with open(env_file) as f:
+            for line in f:
+                line = line.strip()
+                if line.startswith("NODES=") and not os.getenv("NODES"):
+                    os.environ["NODES"] = line.split("=", 1)[1].strip().strip('"')
+                elif line.startswith("CORE_VPS=") and not os.getenv("CORE_VPS"):
+                    os.environ["CORE_VPS"] = line.split("=", 1)[1].strip().strip('"')
+
+
+load_addresses()
+
+nodes_env = os.getenv("NODES")
+core_vps = os.getenv("CORE_VPS")
+if not nodes_env or not core_vps:
+    raise RuntimeError("NODES and CORE_VPS must be set via environment or addresses.env")
+
+NODES = nodes_env.split(",")
+CORE_VPS = core_vps
 LOG_PATH = "/tmp/fb_combined.log"
 
 

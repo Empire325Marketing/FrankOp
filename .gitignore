@@ -6,3 +6,5 @@ var/www/html/james/ultimate_ui/.next/
 .env
 var/www/html/james/ultimate_ui/.next/
 *.log
+
+etc/addresses.env

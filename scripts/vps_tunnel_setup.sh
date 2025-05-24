@@ -2,14 +2,14 @@
 # vps_tunnel_setup.sh - Create a persistent SSH tunnel from a VPS node to RunPod
 #
 # Usage: vps_tunnel_setup.sh <remote_port>
-# Each VPS is assigned a unique remote_port:
-#   145.223.73.4 -> 5045
-#   31.97.13.92  -> 5046
-#   31.97.13.95  -> 5047
-#   31.97.13.100 -> 5048
-#   31.97.13.102 -> 5049
-#   31.97.13.104 -> 5050
-#   31.97.13.106 -> 5051
+# Each VPS is assigned a unique remote_port. Example mapping:
+#   198.51.100.5 -> 5045
+#   192.0.2.10   -> 5046
+#   192.0.2.11   -> 5047
+#   192.0.2.12   -> 5048
+#   192.0.2.13   -> 5049
+#   192.0.2.14   -> 5050
+#   192.0.2.15   -> 5051
 #
 # The script configures autossh to expose local Filebeat (localhost:5044)
 # to RunPod on the given remote port. autossh automatically restarts the
