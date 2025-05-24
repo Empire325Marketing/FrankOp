@@ -25,7 +25,7 @@ export default function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 to-indigo-600">
       <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow w-80">
-        <h1 className="text-2xl font-bold mb-4 text-center">WELCOME PINARCH I\'m JAMES</h1>
+        <h1 className="text-2xl font-bold mb-4 text-center">Hi, I’m James – your Trinity AI assistant</h1>
         <input
           type="password"
           value={token}
