@@ -1,4 +1,9 @@
-"""Unified interface for ChatGPT, Gemini, and OpenEvolve."""
+"""Unified interface for ChatGPT, Gemini, and OpenEvolve.
+
+TODO: integrate with the actual OpenEvolve backend once it becomes
+available. Currently the OpenEvolve support merely dispatches a placeholder
+GitHub workflow.
+"""
 
 from __future__ import annotations
 
@@ -46,7 +51,11 @@ class TrinityAI:
         raise ValueError(f"Unknown model: {model}")
 
     def _open_evolve_action(self, instruction: str) -> str:
-        """Trigger an OpenEvolve GitHub workflow."""
+        """Trigger an OpenEvolve GitHub workflow.
+
+        TODO: replace this placeholder implementation with calls to the
+        official OpenEvolve API once it is released.
+        """
 
         if not self.open_evolve_token:
             raise RuntimeError("OPENEVOLVE_TOKEN environment variable not set")
