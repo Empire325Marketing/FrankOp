@@ -159,8 +159,8 @@ lines and any SSL directives if the certificate is absent, tests the configurati
 
 A minimal web interface is provided as a starting point for the future
 "ultimate" Trinity AI UI. The backend API is implemented with Flask in
-`app.py` and exposes a `/api/chat` endpoint. A Next.js 14 frontend lives in
-`frontend/`.
+`app.py` and exposes a `/api/chat` endpoint. The production Next.js 14 frontend
+resides in `var/www/html/james/ultimate_ui/`.
 
 ### Running locally
 
@@ -172,7 +172,7 @@ A minimal web interface is provided as a starting point for the future
    ```bash
    scripts/start_trinity_server.sh
    ```
-3. In the `frontend/` directory install dependencies and run the dev server:
+3. In the `var/www/html/james/ultimate_ui/` directory install dependencies and run the dev server:
    ```bash
    npm install
    npm run dev

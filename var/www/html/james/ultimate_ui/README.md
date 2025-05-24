@@ -17,6 +17,9 @@ It provides a basic chat interface that communicates with the Flask backend in
 
 The app expects the Flask API to be running on `http://localhost:5001`.
 
+This project is configured with `basePath: '/james'` so assets are served under
+that URL segment. Update `next.config.js` if deploying elsewhere.
+
 ## Production build
 
 Next.js can require a fair amount of memory when compiling. If the build
