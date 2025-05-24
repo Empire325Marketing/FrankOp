@@ -16,3 +16,21 @@ It provides a basic chat interface that communicates with the Flask backend in
    ```
 
 The app expects the Flask API to be running on `http://localhost:8000`.
+
+## Production build
+
+Next.js can require a fair amount of memory when compiling. If the build
+process fails with an out-of-memory error, run the build with an increased
+memory limit:
+
+```bash
+NODE_OPTIONS=--max-old-space-size=4096 npm run build
+```
+
+This sets the V8 heap to 4&nbsp;GB which prevents the Rust panic observed in
+resource constrained environments. After building, start the production server
+with:
+
+```bash
+npm run start
+```
