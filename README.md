@@ -141,6 +141,18 @@ sudo scripts/enable_external_access.sh
 
 This script enables ports 80 and 443 via `ufw` and `iptables`, ensures Nginx listens on all interfaces, and reloads the server.
 
+## Fixing Missing SSL Configuration
+
+If Nginx fails to start because the LetsEncrypt files referenced in
+`/etc/nginx/sites-available/trinity-final.conf` are absent, run:
+
+```bash
+sudo scripts/fix_nginx_ssl.sh
+```
+
+The script backs up the configuration, comments out the missing include
+lines and any SSL directives if the certificate is absent, tests the configuration and reloads Nginx.
+
 ## Trinity AI Web Interface
 
 A minimal web interface is provided as a starting point for the future
