@@ -10,18 +10,21 @@ server {
     ssl_certificate     /etc/ssl/certs/placeholder.crt;
     ssl_certificate_key /etc/ssl/private/placeholder.key;
 
+    # Redirect the root to the James interface hosted under /james
     location = / {
-        return 302 https://325automations.com/login;
+        return 302 https://325automations.com/james/login;
     }
 
-    location / {
-        proxy_pass http://${UI_HOST}:${UI_PORT};
+    # Serve the Next.js UI from /james
+    location /james/ {
+        proxy_pass http://${UI_HOST}:${UI_PORT}/;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
     }
 
-    location /api/ {
-        proxy_pass http://${API_HOST}:${API_PORT};
+    # Proxy API requests also under the /james prefix
+    location /james/api/ {
+        proxy_pass http://${API_HOST}:${API_PORT}/;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
     }
