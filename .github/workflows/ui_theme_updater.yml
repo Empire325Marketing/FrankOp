@@ -1,4 +1,4 @@
-name: Self-Forge FrankCore
+name: Self-Forge JamesCore
 
 on:
   push:
@@ -20,18 +20,18 @@ jobs:
         username: ${{ secrets.USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
-          echo "🔥 [FRANK INIT] Self-repairing GitOps integrity"
+          echo "🔥 [JAMES INIT] Self-repairing GitOps integrity"
 
-          rm -rf /opt/frank_core_tmp
-          git clone git@github.com:Empire325Marketing/FrankOp.git /opt/frank_core_tmp || exit 1
+          rm -rf /opt/james_core_tmp
+          git clone git@github.com:Empire325Marketing/FrankOp.git /opt/james_core_tmp || exit 1
 
           echo "🔁 Overwriting core with latest commit"
-          rm -rf /opt/frank_core_bak
-          mv /opt/frank_core /opt/frank_core_bak || true
-          mv /opt/frank_core_tmp /opt/frank_core || { echo "💥 Deploy failed. Reverting to backup."; mv /opt/frank_core_bak /opt/frank_core; exit 2; }
+          rm -rf /opt/james_core_bak
+          mv /opt/james_core /opt/james_core_bak || true
+          mv /opt/james_core_tmp /opt/james_core || { echo "💥 Deploy failed. Reverting to backup."; mv /opt/james_core_bak /opt/james_core; exit 2; }
 
-          cd /opt/frank_core || { echo "💥 Core directory missing. Reverting..."; mv /opt/frank_core_bak /opt/frank_core; exit 3; }
-          source venv/bin/activate || { echo "💥 Virtualenv activation failed. Reverting..."; mv /opt/frank_core_bak /opt/frank_core; exit 4; }
+          cd /opt/james_core || { echo "💥 Core directory missing. Reverting..."; mv /opt/james_core_bak /opt/james_core; exit 3; }
+          source venv/bin/activate || { echo "💥 Virtualenv activation failed. Reverting..."; mv /opt/james_core_bak /opt/james_core; exit 4; }
 
           echo "📦 Rebuilding environment"
           pip install -r requirements.txt || pip install fastapi uvicorn jinja2 aiofiles
@@ -43,7 +43,7 @@ jobs:
           pkill -f uvicorn || true
           nohup uvicorn main_control_hub:app --host 0.0.0.0 --port 1337 > app.log 2>&1 &
 
-          echo "✅ FrankCore deployed. No mutation loop initiated."
+          echo "✅ JamesCore deployed. No mutation loop initiated."
 
     - name: Confirm Deployment
-      run: echo "💥 FrankCore deployed cleanly. Run mutation manually if desired."
+      run: echo "💥 JamesCore deployed cleanly. Run mutation manually if desired."

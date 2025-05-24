@@ -1,4 +1,4 @@
-# FrankOp
+# JamesOp
 
 Automation utilities for deployment and monitoring of Fluent Bit and Filebeat across multiple nodes.
 
