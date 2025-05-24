@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-NODES=(31.97.13.92 31.97.13.95 31.97.13.100 31.97.13.102)
-CORE_VPS=145.223.73.4
+CONFIG_FILE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/etc/addresses.env"
+if [ -f "$CONFIG_FILE" ]; then
+  # shellcheck source=/dev/null
+  source "$CONFIG_FILE"
+fi
+
+: "${NODES:=31.97.13.92,31.97.13.95,31.97.13.100,31.97.13.102}"
+: "${CORE_VPS:=145.223.73.4}"
+IFS=',' read -r -a NODES <<< "$NODES"
 BACKUP_DIR=/var/backups/fluent-bit
 
 log() {

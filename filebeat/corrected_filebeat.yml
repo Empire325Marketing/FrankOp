@@ -6,7 +6,7 @@ filebeat.inputs:
 
 # Forward logs to central Fluent Bit instance via HTTP
 output.http:
-  hosts: ["145.223.73.4:5044"]
+  hosts: ["${CORE_VPS}:5044"]
   ssl.enabled: false
   max_retries: 3
   timeout: 30

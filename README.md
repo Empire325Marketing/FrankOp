@@ -6,6 +6,7 @@ Automation utilities for deployment and monitoring of Fluent Bit and Filebeat ac
 - `fluent-bit/` – Fluent Bit configuration files.
 - `filebeat/` – Filebeat configuration files.
 - `scripts/` – Automation scripts for deployment, rollback, health checks, testing and Filebeat setup.
+- `etc/addresses.env` – Example environment file providing IP addresses for all scripts.
 
 ## Usage
 
@@ -52,6 +53,27 @@ scripts/rollback.sh
 Run an end-to-end test to confirm log forwarding:
 ```bash
 scripts/e2e_test.py
+```
+
+## Configuring IP addresses
+
+All deployment and monitoring scripts read the list of VPS nodes and the
+address of the core aggregator from environment variables. An example
+file `etc/addresses.env` is provided. Source this file (or define the
+variables manually) before running any script:
+
+```bash
+source etc/addresses.env
+export NODES   # comma separated list of node IPs
+export CORE_VPS
+```
+
+Nginx and Fluent Bit configuration files use the variables `UI_HOST`,
+`UI_PORT`, `API_HOST`, `API_PORT` and `FLUENT_LISTEN_ADDR`. When deploying
+these configs you can apply `envsubst` to substitute the values:
+
+```bash
+envsubst < etc/nginx/sites-available/trinity-complete > /etc/nginx/sites-available/trinity-complete
 ```
 
 ## Reverse SSH tunnel setup

@@ -10,13 +10,11 @@ SSH_PASSWORD = os.getenv("SSH_PASSWORD", "SDAasdsa23..dsS")
 FILEBEAT_CONFIG = Path(__file__).resolve().parents[1] / "filebeat" / "corrected_filebeat.yml"
 FLUENT_BIT_CONFIG = Path(__file__).resolve().parents[1] / "fluent-bit" / "fluent-bit.conf"
 
-NODES = [
-    "31.97.13.92",
-    "31.97.13.95",
-    "31.97.13.100",
-    "31.97.13.102",
-]
-CORE_VPS = "145.223.73.4"
+NODES = os.getenv(
+    "NODES",
+    "31.97.13.92,31.97.13.95,31.97.13.100,31.97.13.102",
+).split(",")
+CORE_VPS = os.getenv("CORE_VPS", "145.223.73.4")
 
 
 def log(msg: str):
