@@ -104,3 +104,25 @@ sudo scripts/enable_external_access.sh
 ```
 
 This script enables ports 80 and 443 via `ufw` and `iptables`, ensures Nginx listens on all interfaces, and reloads the server.
+
+## Trinity AI Web Interface
+
+A minimal web interface is provided as a starting point for the future
+"ultimate" Trinity AI UI. The backend API is implemented with Flask in
+`app.py` and exposes a `/api/chat` endpoint. A Next.js 14 frontend lives in
+`frontend/`.
+
+### Running locally
+
+1. Start the Flask API:
+   ```bash
+   python3 app.py
+   ```
+2. In the `frontend/` directory install dependencies and run the dev server:
+   ```bash
+   npm install
+   npm run dev
+   ```
+
+The frontend will send chat prompts to `http://localhost:8000/api/chat` and
+display the result.
