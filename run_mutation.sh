@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "[+] Starting FRANK mutation cycle..."
+echo "[+] Starting JAMES mutation cycle..."
 end=$((SECONDS+39600))
 while [ $SECONDS -lt $end ]; do
   python3 feedback_rewriter.py
@@ -9,4 +9,4 @@ while [ $SECONDS -lt $end ]; do
   python3 injection_proxy.py
   sleep 300
 done
-echo "[+] FRANK LOOP COMPLETE."
+echo "[+] JAMES LOOP COMPLETE."
