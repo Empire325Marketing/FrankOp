@@ -180,3 +180,11 @@ A minimal web interface is provided as a starting point for the future
 
 The frontend will send chat prompts to `http://localhost:5001/api/chat` and
 display the result.
+
+### Hosting under `/james`
+
+The included Nginx configurations and Next.js project are prepared to host the
+Trinity UI at `https://325automations.com/james`. When deploying to a server,
+copy one of the provided site configs to `/etc/nginx/sites-available`, enable it
+and reload Nginx. Requests to `/james` will be proxied to the Next.js frontend
+and `/james/api/` will reach the Flask backend.
