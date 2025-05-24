@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from flask import Flask, request, jsonify
+import os
 from flask_cors import CORS
 
 from trinity_ai import TrinityAI
@@ -10,6 +11,7 @@ from trinity_ai import TrinityAI
 app = Flask(__name__)
 CORS(app)
 trinity = TrinityAI()
+PINARCH_TOKEN = os.getenv("PINARCH_TOKEN", "DSFSfdss22$24@21--sdfsfsdf2442442")
 
 
 @app.route("/api/chat", methods=["POST"])
@@ -25,6 +27,16 @@ def chat() -> tuple:
     except Exception as exc:  # pragma: no cover - network failures
         return jsonify({"error": str(exc)}), 500
     return jsonify({"response": response})
+
+
+@app.route("/api/login", methods=["POST"])
+def login() -> tuple:
+    """Authenticate using the Pinarch token."""
+    data = request.get_json(force=True)
+    token = data.get("token")
+    if token == PINARCH_TOKEN:
+        return jsonify({"success": True})
+    return jsonify({"success": False}), 401
 
 
 @app.route("/api/status", methods=["GET"])
