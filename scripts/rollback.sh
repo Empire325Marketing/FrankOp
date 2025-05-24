@@ -7,7 +7,7 @@ if [ -f "$CONFIG_FILE" ]; then
   source "$CONFIG_FILE"
 fi
 
-: "${NODES:=31.97.13.92,31.97.13.95,31.97.13.100,31.97.13.102}"
+: "${NODES:=31.97.13.92,31.97.13.95,31.97.13.100,31.97.13.102,31.97.13.104,31.97.13.108}"
 : "${CORE_VPS:=145.223.73.4}"
 IFS=',' read -r -a NODES <<< "$NODES"
 BACKUP_DIR=/var/backups/fluent-bit
