@@ -147,10 +147,12 @@ If Nginx fails to start because the LetsEncrypt files referenced in
 `/etc/nginx/sites-available/trinity-final.conf` are absent, run:
 
 ```bash
-sudo scripts/fix_nginx_ssl.sh
+sudo scripts/fix_nginx_ssl.sh [domain]
 ```
 
-The script backs up the configuration, comments out the missing include
+Pass the domain as an argument or via the `DOMAIN` environment variable to control which
+certificate directory under `/etc/letsencrypt/live` is checked. If omitted, it defaults to
+`325automations.com`. The script backs up the configuration, comments out the missing include
 lines and any SSL directives if the certificate is absent, tests the configuration and reloads Nginx.
 
 ## Trinity AI Web Interface

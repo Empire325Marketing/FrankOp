@@ -3,8 +3,23 @@
 
 set -euo pipefail
 
+usage() {
+  echo "Usage: $0 [DOMAIN]" >&2
+  echo "Disable SSL directives when LetsEncrypt files are missing." >&2
+  echo "DOMAIN specifies the certificate directory under /etc/letsencrypt/live." >&2
+  echo "It can also be provided via the DOMAIN environment variable." >&2
+}
+
+if [ "${1:-}" = "-h" ] || [ "${1:-}" = "--help" ]; then
+  usage
+  exit 0
+fi
+
 CONFIG_FILE="/etc/nginx/sites-available/trinity-final.conf"
-CERT_DIR="/etc/letsencrypt/live/325automations.com"
+# Domain used to locate LetsEncrypt certificates. Can be overridden via the
+# DOMAIN environment variable or passed as the first argument.
+DOMAIN="${1:-${DOMAIN:-325automations.com}}"
+CERT_DIR="/etc/letsencrypt/live/${DOMAIN}"
 TIMESTAMP="$(date '+%Y%m%d_%H%M%S')"
 BACKUP_FILE="${CONFIG_FILE}.backup_${TIMESTAMP}"
 
