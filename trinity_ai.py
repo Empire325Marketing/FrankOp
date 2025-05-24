@@ -9,10 +9,17 @@ from __future__ import annotations
 
 import os
 from typing import Optional
+import logging
 
 import requests
 
 import openai
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="[%(asctime)s] %(levelname)s:%(name)s:%(message)s",
+)
+logger = logging.getLogger(__name__)
 
 
 class TrinityAI:
@@ -21,14 +28,18 @@ class TrinityAI:
     def __init__(self,
                  openai_api_key: Optional[str] = None,
                  gemini_api_key: Optional[str] = None,
-                 gemini_base_url: str = "https://generativelanguage.googleapis.com/v1beta/openai/",
-                 open_evolve_token: Optional[str] = None) -> None:
+                 gemini_base_url: str = "https://generativelanguage.googleapis.com/v1beta/openai/") -> None:
+        """Initialize API clients.
+
+        The OpenEvolve token is read exclusively from the ``OPENEVOLVE_TOKEN``
+        environment variable.
+        """
         self.openai_client = openai.OpenAI(api_key=openai_api_key or os.getenv("OPENAI_API_KEY"))
         self.gemini_client = openai.OpenAI(
             api_key=gemini_api_key or os.getenv("GEMINI_API_KEY"),
             base_url=gemini_base_url,
         )
-        self.open_evolve_token = open_evolve_token or os.getenv("OPENEVOLVE_TOKEN")
+        self.open_evolve_token = os.getenv("OPENEVOLVE_TOKEN")
 
     def chat(self, prompt: str, model: str = "openai", **kwargs) -> str:
         """Send a prompt to the selected model and return the response text."""
@@ -74,10 +85,18 @@ class TrinityAI:
 
         payload = {"ref": "main", "inputs": {"instruction": instruction}}
 
+        logger.info("Dispatching OpenEvolve workflow '%s' in %s", workflow, repo)
+
         try:
             response = requests.post(url, json=payload, headers=headers, timeout=10)
+            logger.info("OpenEvolve response status %s", response.status_code)
             response.raise_for_status()
+        except requests.HTTPError as exc:
+            text = exc.response.text if exc.response else str(exc)
+            logger.error("OpenEvolve HTTP %s: %s", exc.response.status_code if exc.response else "?", text)
+            return f"[OpenEvolve error] {exc.response.status_code if exc.response else 'HTTP error'}"
         except requests.RequestException as exc:
+            logger.error("OpenEvolve request failed: %s", exc)
             return f"[OpenEvolve error] {exc}"
 
         return "[OpenEvolve workflow dispatched]"

@@ -8,7 +8,7 @@ Before running the utilities or the web application, set the following environme
 
 - `SSH_PASSWORD` – password used by the deployment and monitoring scripts when connecting to the VPS nodes.
 - `PINARCH_TOKEN` – secret token checked by `app.py` when clients authenticate via `/api/login`.
-- `OPENEVOLVE_TOKEN` – GitHub token used by `trinity_ai.py` to dispatch workflow automation.
+- `OPENEVOLVE_TOKEN` – GitHub personal access token used by `trinity_ai.py` to dispatch workflow automation. The token must have the `workflow` permission.
 
 Example:
 
@@ -140,10 +140,11 @@ Example usage:
 python3 trinity_ai.py
 ```
 
-The script will read API keys from the environment variables `OPENAI_API_KEY`,
+The script reads API keys from the environment variables `OPENAI_API_KEY`,
 `GEMINI_API_KEY`, and `OPENEVOLVE_TOKEN`.
-`OPENEVOLVE_TOKEN` must be a GitHub personal access token with permission to
-trigger workflows in the target repository. Optional environment variables
+`OPENEVOLVE_TOKEN` **must** be set in the environment (it cannot be passed to
+`TrinityAI`) and requires the GitHub `workflow` permission to trigger
+workflows in the target repository. Optional environment variables
 `OPENEVOLVE_REPO` and `OPENEVOLVE_WORKFLOW` can override the repository and
 workflow file dispatched by the `open_evolve` backend.
 
