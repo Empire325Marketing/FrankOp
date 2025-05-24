@@ -20,30 +20,23 @@ jobs:
         username: ${{ secrets.USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
-          echo "🔥 [JAMES INIT] Self-repairing GitOps integrity"
+          echo "🔥 [DEPLOY] Updating application"
 
           rm -rf /opt/james_core_tmp
           git clone git@github.com:Empire325Marketing/FrankOp.git /opt/james_core_tmp || exit 1
 
-          echo "🔁 Overwriting core with latest commit"
-          rm -rf /opt/james_core_bak
-          mv /opt/james_core /opt/james_core_bak || true
-          mv /opt/james_core_tmp /opt/james_core || { echo "💥 Deploy failed. Reverting to backup."; mv /opt/james_core_bak /opt/james_core; exit 2; }
+          rm -rf /opt/james_core
+          mv /opt/james_core_tmp /opt/james_core
 
-          cd /opt/james_core || { echo "💥 Core directory missing. Reverting..."; mv /opt/james_core_bak /opt/james_core; exit 3; }
-          source venv/bin/activate || { echo "💥 Virtualenv activation failed. Reverting..."; mv /opt/james_core_bak /opt/james_core; exit 4; }
+          cd /opt/james_core || exit 1
+          source venv/bin/activate || exit 2
 
-          echo "📦 Rebuilding environment"
-          pip install -r requirements.txt || pip install fastapi uvicorn jinja2 aiofiles
+          pip install -r requirements.txt
 
-          echo "🎨 UI Overhaul Triggered"
-          python3 .github/workflows/ui_theme_updater.yml || echo "[UI] Theme script not found—skip."
-
-          echo "🚀 Restarting control server"
           pkill -f uvicorn || true
           nohup uvicorn main_control_hub:app --host 0.0.0.0 --port 1337 > app.log 2>&1 &
 
-          echo "✅ JamesCore deployed. No mutation loop initiated."
+          echo "✅ Deployment complete."
 
     - name: Confirm Deployment
       run: echo "💥 JamesCore deployed cleanly. Run mutation manually if desired."
