@@ -5,3 +5,4 @@ node_modules/
 var/www/html/james/ultimate_ui/.next/
 .env
 var/www/html/james/ultimate_ui/.next/
+*.log

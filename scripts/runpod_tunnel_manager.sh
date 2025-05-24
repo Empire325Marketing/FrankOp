@@ -2,15 +2,15 @@
 # runpod_tunnel_manager.sh - Accepts reverse SSH tunnels and aggregates logs
 #
 # This script runs on the RunPod container. It starts Fluent Bit to
-# collect logs on port 5044 and forwards ports 5045-5049 to this
-# internal collector. Each VPS establishes an SSH tunnel to one of
-# these ports. Logs from all VPS nodes are combined into a single
+# collect logs on port 5044 and forwards ports 5045-5051 to this
+# internal collector. Each VPS (six in total) establishes an SSH
+# tunnel to one of these ports. Logs from all VPS nodes are combined into a single
 # /tmp/vps_combined.log file.
 
 set -euo pipefail
 
 # Ports assigned to incoming tunnels
-TUNNEL_PORTS=(5045 5046 5047 5048 5049)
+TUNNEL_PORTS=(5045 5046 5047 5048 5049 5050 5051)
 
 log() {
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*"
