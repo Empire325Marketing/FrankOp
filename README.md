@@ -159,6 +159,26 @@ trigger workflows in the target repository. Optional environment variables
 `OPENEVOLVE_REPO` and `OPENEVOLVE_WORKFLOW` can override the repository and
 workflow file dispatched by the `open_evolve` backend.
 
+## Prompt utilities
+
+Two helper scripts aid local experimentation with prompt mutation logic.
+
+- `prompt_mutate.py` applies simple word substitutions. Run it directly to see
+  the mutated output:
+
+  ```bash
+  python3 prompt_mutate.py "hello AI" --steps 2
+  ```
+
+- `omega_simulator.py` chains multiple mutations together to simulate how a
+  prompt might evolve over time:
+
+  ```bash
+  python3 omega_simulator.py "hello world" --cycles 3
+  ```
+
+Unit tests covering the mutation helpers are executed via `scripts/run_tests.sh`.
+
 ## Enabling External Access
 
 The `scripts/enable_external_access.sh` helper configures firewall rules and updates the default Nginx site so the Trinity AI web interface can be reached from the internet.
