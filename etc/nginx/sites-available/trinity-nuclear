@@ -22,6 +22,16 @@ server {
         proxy_set_header Connection 'upgrade';
     }
 
+    # Explicit route for the James Next.js interface
+    location /james/ {
+        proxy_pass http://${UI_HOST}:${UI_PORT};
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+    }
+
     location /api/ {
         proxy_pass http://${API_HOST}:${API_PORT};
         proxy_set_header Host $host;

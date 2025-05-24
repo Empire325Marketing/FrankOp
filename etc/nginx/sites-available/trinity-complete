@@ -20,6 +20,13 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
     }
 
+    # Explicit route for the James Next.js interface
+    location /james/ {
+        proxy_pass http://${UI_HOST}:${UI_PORT};
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
     location /api/ {
         proxy_pass http://${API_HOST}:${API_PORT};
         proxy_set_header Host $host;

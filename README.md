@@ -76,9 +76,10 @@ scripts/e2e_test.py
 ## Configuring IP addresses
 
 All deployment and monitoring scripts read the list of VPS nodes and the
-address of the core aggregator from environment variables. An example
-file `etc/addresses.env` is provided. Source this file (or define the
-variables manually) before running any script:
+address of the core aggregator from environment variables. If your
+infrastructure uses six VPS hosts update the `NODES` variable
+accordingly. An example file `etc/addresses.env` is provided. Source this
+file (or define the variables manually) before running any script:
 
 ```bash
 source etc/addresses.env
@@ -119,11 +120,15 @@ port `5044` into the SSH tunnel.
 
 ## Trinity AI Integration
 
-`trinity_ai.py` provides a unified Python interface to three AI backends:
+`trinity_ai.py` provides a unified Python interface to three AI backends.
+Conversation history is stored in memory so the models can maintain context
+between calls. Call `reset_history()` on a `TrinityAI` instance to clear the
+stored dialogue:
 
 - **ChatGPT** via the standard OpenAI API.
 - **Gemini** via an OpenAI-compatible endpoint (`https://generativelanguage.googleapis.com/v1beta/openai/`).
-- **OpenEvolve** for GitHub workflow automation (placeholder implementation).
+- **OpenEvolve** for GitHub workflow automation via the `OPENEVOLVE_URL`
+  endpoint and `OPENEVOLVE_TOKEN`.
 
 Example usage:
 
@@ -164,7 +169,8 @@ lines and any SSL directives if the certificate is absent, tests the configurati
 A minimal web interface is provided as a starting point for the future
 "ultimate" Trinity AI UI. The backend API is implemented with Flask in
 `app.py` and exposes a `/api/chat` endpoint. The production Next.js 14 frontend
-resides in `var/www/html/james/ultimate_ui/`.
+resides in `var/www/html/james/ultimate_ui/`. Nginx now includes an explicit
+`/james` location block which proxies to this Next.js server.
 
 ### Running locally
 

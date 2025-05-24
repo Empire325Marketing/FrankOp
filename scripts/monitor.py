@@ -12,7 +12,7 @@ if not SSH_PASSWORD:
 
 NODES = os.getenv(
     "NODES",
-    "31.97.13.92,31.97.13.95,31.97.13.100,31.97.13.102",
+    "31.97.13.92,31.97.13.95,31.97.13.100,31.97.13.102,31.97.13.105,31.97.13.107",
 ).split(",")
 CORE_VPS = os.getenv("CORE_VPS", "145.223.73.4")
 LOG_PATH = "/tmp/vps_combined.log"
