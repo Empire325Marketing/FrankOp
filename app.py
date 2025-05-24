@@ -2,13 +2,23 @@
 
 from __future__ import annotations
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS
 
 from trinity_ai import TrinityAI
 
+PINARCH_TOKEN = "DSFSfdss22$24@21--sdfsfsdf2442442"
+
 app = Flask(__name__)
 CORS(app)
+
+
+@app.after_request
+def add_cors_headers(response):
+    response.headers.setdefault("Access-Control-Allow-Origin", "*")
+    response.headers.setdefault("Access-Control-Allow-Headers", "Content-Type")
+    response.headers.setdefault("Access-Control-Allow-Methods", "GET,POST,OPTIONS")
+    return response
 trinity = TrinityAI()
 
 
@@ -27,6 +37,24 @@ def chat() -> tuple:
     return jsonify({"response": response})
 
 
+@app.route("/api/login", methods=["POST", "OPTIONS"])
+def login() -> tuple:
+    """Validate the PINARCH token."""
+    if request.method == "OPTIONS":
+        return make_response("", 204)
+    data = request.get_json(force=True)
+    token = data.get("token")
+    if token == PINARCH_TOKEN:
+        return jsonify({"success": True})
+    return jsonify({"success": False}), 401
+
+
+@app.route("/api/stats", methods=["GET"])
+def stats() -> tuple:
+    """Return basic status stats for the dashboard."""
+    return jsonify({"status": "running", "users": 1})
+
+
 @app.route("/api/status", methods=["GET"])
 def status() -> tuple:
     """Simple status endpoint for health checks."""
@@ -40,4 +68,4 @@ def health() -> tuple:
 
 
 if __name__ == "__main__":  # pragma: no cover
-    app.run(host="0.0.0.0", port=8000)
+    app.run(host="0.0.0.0", port=5001)
