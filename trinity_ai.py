@@ -5,6 +5,8 @@ from __future__ import annotations
 import os
 from typing import Optional
 
+import requests
+
 import openai
 
 
@@ -44,11 +46,32 @@ class TrinityAI:
         raise ValueError(f"Unknown model: {model}")
 
     def _open_evolve_action(self, instruction: str) -> str:
-        """Placeholder for triggering OpenEvolve workflows."""
-        # Real implementation would interact with the GitHub API and OpenEvolve
-        # to kick off automation workflows. This stub returns a canned response
-        # so that tests can run without external dependencies.
-        return f"[OpenEvolve triggered] {instruction}"
+        """Trigger an OpenEvolve GitHub workflow."""
+
+        if not self.open_evolve_token:
+            raise RuntimeError("OPENEVOLVE_TOKEN environment variable not set")
+
+        repo = os.getenv("OPENEVOLVE_REPO", "Empire325Marketing/FrankOp")
+        workflow = os.getenv("OPENEVOLVE_WORKFLOW", "deploy.yml")
+        url = (
+            "https://api.github.com/repos/"
+            f"{repo}/actions/workflows/{workflow}/dispatches"
+        )
+
+        headers = {
+            "Authorization": f"Bearer {self.open_evolve_token}",
+            "Accept": "application/vnd.github+json",
+        }
+
+        payload = {"ref": "main", "inputs": {"instruction": instruction}}
+
+        try:
+            response = requests.post(url, json=payload, headers=headers, timeout=10)
+            response.raise_for_status()
+        except requests.RequestException as exc:
+            return f"[OpenEvolve error] {exc}"
+
+        return "[OpenEvolve workflow dispatched]"
 
 
 if __name__ == "__main__":
