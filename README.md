@@ -134,10 +134,21 @@ The OpenEvolve integration currently only dispatches a placeholder GitHub
 workflow. The real backend service is still under development and is not yet
 available.
 
+The controller also exposes a special **`evolve`** mode which queries both
+ChatGPT and Gemini and then triggers the OpenEvolve workflow. This is useful for
+testing how the two language models respond to the same prompt while also
+initiating any automation hooks.
+
 Example usage:
 
 ```bash
 python3 trinity_ai.py
+```
+
+Run the special evolve mode with:
+
+```bash
+python3 trinity_ai.py --model evolve --prompt "Hello"
 ```
 
 The script will read API keys from the environment variables `OPENAI_API_KEY`,

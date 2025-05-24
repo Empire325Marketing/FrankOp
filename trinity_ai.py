@@ -48,6 +48,8 @@ class TrinityAI:
             return response.choices[0].message.content
         if model == "open_evolve":
             return self._open_evolve_action(prompt)
+        if model == "evolve":
+            return self.evolve(prompt, **kwargs)
         raise ValueError(f"Unknown model: {model}")
 
     def _open_evolve_action(self, instruction: str) -> str:
@@ -82,8 +84,34 @@ class TrinityAI:
 
         return "[OpenEvolve workflow dispatched]"
 
+    def evolve(self, prompt: str, **kwargs) -> str:
+        """Run the prompt through both base models and dispatch OpenEvolve."""
+        openai_resp = self.chat(prompt, model="openai", **kwargs)
+        gemini_resp = self.chat(prompt, model="gemini", **kwargs)
+        try:
+            evolve_status = self._open_evolve_action(prompt)
+        except Exception as exc:  # pragma: no cover - network failures
+            evolve_status = str(exc)
+        return (
+            "[OpenAI]\n"
+            f"{openai_resp}\n"
+            "[Gemini]\n"
+            f"{gemini_resp}\n"
+            f"{evolve_status}"
+        )
 
-if __name__ == "__main__":
+
+if __name__ == "__main__":  # pragma: no cover - simple CLI helper
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Trinity AI CLI")
+    parser.add_argument("--prompt", default="Hello from Trinity AI!")
+    parser.add_argument(
+        "--model",
+        default="openai",
+        help="openai, gemini, open_evolve or evolve",
+    )
+    args = parser.parse_args()
+
     controller = TrinityAI()
-    result = controller.chat("Hello from Trinity AI!", model="openai")
-    print(result)
+    print(controller.chat(args.prompt, model=args.model))
