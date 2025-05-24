@@ -200,5 +200,9 @@ resides in `var/www/html/james/ultimate_ui/`.
    scripts/start_trinity_frontend.sh
    ```
 
-   The frontend will send chat prompts to `http://localhost:5001/api/chat` and
-   display the result.
+   The build directories `node_modules/`, `.next/` and any generated `dist/` folder
+   are listed in `.gitignore`. These artifacts are created when running the above
+   commands and should **not** be committed to version control.
+
+The frontend will send chat prompts to `http://localhost:5001/api/chat` and
+display the result.
