@@ -114,11 +114,15 @@ A minimal web interface is provided as a starting point for the future
 
 ### Running locally
 
-1. Start the Flask API:
+1. Install the Python dependencies:
    ```bash
-   python3 app.py
+   python3 -m pip install -r requirements.txt
    ```
-2. In the `frontend/` directory install dependencies and run the dev server:
+2. Start the production API using Gunicorn:
+   ```bash
+   scripts/start_trinity_server.sh
+   ```
+3. In the `frontend/` directory install dependencies and run the dev server:
    ```bash
    npm install
    npm run dev
