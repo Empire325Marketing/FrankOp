@@ -17,7 +17,7 @@ set -euo pipefail
 
 RUNPOD_HOST="root@d82c6a1a4730"
 RUNPOD_PORT=22
-SSH_PASSWORD="SDAasdsa23..dsS"
+SSH_PASSWORD="${SSH_PASSWORD:?SSH_PASSWORD environment variable not set}"
 LOCAL_PORT=5044
 
 usage() {

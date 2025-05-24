@@ -3,11 +3,14 @@
 from __future__ import annotations
 
 from flask import Flask, request, jsonify, make_response
+import os
 from flask_cors import CORS
 
 from trinity_ai import TrinityAI
 
-PINARCH_TOKEN = "DSFSfdss22$24@21--sdfsfsdf2442442"
+PINARCH_TOKEN = os.getenv("PINARCH_TOKEN")
+if not PINARCH_TOKEN:
+    raise RuntimeError("PINARCH_TOKEN environment variable not set")
 
 app = Flask(__name__)
 CORS(app)

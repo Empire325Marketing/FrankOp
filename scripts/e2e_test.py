@@ -7,7 +7,9 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 
 SSH_USER = os.getenv("SSH_USER", "root")
-SSH_PASSWORD = os.getenv("SSH_PASSWORD", "SDAasdsa23..dsS")
+SSH_PASSWORD = os.getenv("SSH_PASSWORD")
+if not SSH_PASSWORD:
+    raise RuntimeError("SSH_PASSWORD environment variable not set")
 
 NODES = [
     "145.223.73.4",

@@ -2,6 +2,20 @@
 
 Automation utilities for deployment and monitoring of Fluent Bit and Filebeat across multiple nodes.
 
+## Required Environment Variables
+
+Before running the utilities or the web application, set the following environment variables:
+
+- `SSH_PASSWORD` – password used by the deployment and monitoring scripts when connecting to the VPS nodes.
+- `PINARCH_TOKEN` – secret token checked by `app.py` when clients authenticate via `/api/login`.
+
+Example:
+
+```bash
+export SSH_PASSWORD="<your_ssh_password>"
+export PINARCH_TOKEN="<your_pinarch_token>"
+```
+
 ## Directory overview
 - `fluent-bit/` – Fluent Bit configuration files.
 - `filebeat/` – Filebeat configuration files.

@@ -6,7 +6,9 @@ from datetime import datetime
 from pathlib import Path
 
 SSH_USER = os.getenv("SSH_USER", "root")
-SSH_PASSWORD = os.getenv("SSH_PASSWORD", "SDAasdsa23..dsS")
+SSH_PASSWORD = os.getenv("SSH_PASSWORD")
+if not SSH_PASSWORD:
+    raise RuntimeError("SSH_PASSWORD environment variable not set")
 
 NODES = [
     "31.97.13.92",
