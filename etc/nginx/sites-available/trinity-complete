@@ -6,9 +6,9 @@ server {
 
     server_name 325automations.com;
 
-    # SSL certificate placeholders
-    ssl_certificate     /etc/ssl/certs/placeholder.crt;
-    ssl_certificate_key /etc/ssl/private/placeholder.key;
+    # SSL certificates issued by Let's Encrypt
+    ssl_certificate     /etc/letsencrypt/live/325automations.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/325automations.com/privkey.pem;
 
     location = / {
         return 302 https://325automations.com/login;
