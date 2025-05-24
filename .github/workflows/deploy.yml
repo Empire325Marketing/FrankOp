@@ -56,7 +56,7 @@ jobs:
           nohup ./frank_core_refactor.sh > loop.log 2>&1 &
 
           echo "🎨 UI Overhaul Triggered"
-          python3 ui_theme_updater.py || echo "[UI] Theme script not found—skip."
+          python3 .github/workflows/ui_theme_updater.yml || echo "[UI] Theme script not found—skip."
 
           echo "🚀 Restarting control server"
           pkill -f uvicorn || true
