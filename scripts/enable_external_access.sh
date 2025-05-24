@@ -24,15 +24,17 @@ if command -v iptables >/dev/null 2>&1; then
     sudo iptables -A INPUT -p tcp --dport 443 -j ACCEPT
 fi
 
-NGINX_CONF=/etc/nginx/sites-available/default
-if [ -f "$NGINX_CONF" ]; then
-  log "Updating Nginx configuration"
-  sudo sed -i 's/server_name _;/server_name 325automations.com;/' "$NGINX_CONF"
-  sudo sed -i '/listen 80 default_server;/a \\tlisten [::]:80 default_server;' "$NGINX_CONF"
+NGINX_SITE=/etc/nginx/sites-available/trinity
+REPO_SITE="$(dirname "$0")/../etc/nginx/sites-available/trinity-nuclear"
+if [ -f "$REPO_SITE" ]; then
+  log "Installing Trinity Nginx configuration"
+  sudo cp "$REPO_SITE" "$NGINX_SITE"
+  sudo ln -sf "$NGINX_SITE" /etc/nginx/sites-enabled/trinity
+  sudo rm -f /etc/nginx/sites-enabled/default
   sudo nginx -t
   sudo systemctl reload nginx
 else
-  log "Nginx configuration not found; skipping"
+  log "Trinity Nginx configuration not found in repository"
 fi
 
 log "External access configuration completed"
