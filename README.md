@@ -126,6 +126,10 @@ port `5044` into the SSH tunnel.
 - **Gemini** via an OpenAI-compatible endpoint (`https://generativelanguage.googleapis.com/v1beta/openai/`).
 - **OpenEvolve** for GitHub workflow automation.
 
+The OpenEvolve integration currently only dispatches a placeholder GitHub
+workflow. The real backend service is still under development and is not yet
+available.
+
 Example usage:
 
 ```bash
