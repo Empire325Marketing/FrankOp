@@ -14,7 +14,11 @@ Example:
 ```bash
 export SSH_PASSWORD="<your_ssh_password>"
 export PINARCH_TOKEN="<your_pinarch_token>"
+scripts/start_trinity_frontend.sh
 ```
+
+`start_trinity_frontend.sh` builds and starts the Next.js app located in
+`var/www/html/james/ultimate_ui`.
 
 ## Directory overview
 - `fluent-bit/` – Fluent Bit configuration files.
