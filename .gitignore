@@ -4,5 +4,4 @@ node_modules/
 **/.next/
 var/www/html/james/ultimate_ui/.next/
 .env
-var/www/html/james/ultimate_ui/.next/
 *.log
