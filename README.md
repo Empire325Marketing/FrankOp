@@ -150,6 +150,21 @@ If Nginx fails to start because the LetsEncrypt files referenced in
 sudo scripts/fix_nginx_ssl.sh
 ```
 
+Run the command from the project root so the relative `scripts` path resolves
+correctly. If the repository is located elsewhere, provide the full absolute
+path instead. One way to ensure you are in the right directory is to use:
+
+```bash
+cd $(git rev-parse --show-toplevel)
+sudo scripts/fix_nginx_ssl.sh
+```
+
+If you cannot find the repository, locate the script with `find`:
+
+```bash
+find / -name fix_nginx_ssl.sh 2>/dev/null
+```
+
 The script backs up the configuration, comments out the missing include
 lines and any SSL directives if the certificate is absent, tests the configuration and reloads Nginx.
 
