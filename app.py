@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from flask import Flask, request, jsonify, make_response
 import os
+import time
 from flask_cors import CORS
 
 from trinity_ai import TrinityAI
@@ -14,6 +15,7 @@ if not PINARCH_TOKEN:
 
 app = Flask(__name__)
 CORS(app)
+START_TIME = time.time()
 
 
 @app.after_request
@@ -54,8 +56,9 @@ def login() -> tuple:
 
 @app.route("/api/stats", methods=["GET"])
 def stats() -> tuple:
-    """Return basic status stats for the dashboard."""
-    return jsonify({"status": "running", "users": 1})
+    """Return runtime statistics for the dashboard."""
+    uptime = int(time.time() - START_TIME)
+    return jsonify({"status": "ok", "uptime": uptime, "users": 1})
 
 
 @app.route("/api/status", methods=["GET"])
