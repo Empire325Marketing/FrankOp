@@ -25,7 +25,7 @@ scripts/start_trinity_frontend.sh
 - `fluent-bit/` – Fluent Bit configuration files.
 - `filebeat/` – Filebeat configuration files.
 - `scripts/` – Automation scripts for deployment, rollback, health checks, testing and Filebeat setup.
-- `etc/addresses.env` – Example environment file providing IP addresses for all scripts.
+- `etc/addresses.env.example` – Template environment file providing IP addresses for all scripts.
 
 ## Usage
 
@@ -77,9 +77,10 @@ scripts/e2e_test.py
 ## Configuring IP addresses
 
 All deployment and monitoring scripts read the list of VPS nodes and the
-address of the core aggregator from environment variables. An example
-file `etc/addresses.env` is provided. Source this file (or define the
-variables manually) before running any script:
+address of the core aggregator from environment variables. A template
+file `etc/addresses.env.example` is provided. Copy this file to
+`etc/addresses.env` and replace the placeholders (or define the variables
+manually) before running any script:
 
 ```bash
 source etc/addresses.env

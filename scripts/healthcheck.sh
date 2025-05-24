@@ -7,8 +7,10 @@ if [ -f "$CONFIG_FILE" ]; then
   source "$CONFIG_FILE"
 fi
 
-: "${NODES:=31.97.13.92,31.97.13.95,31.97.13.100,31.97.13.102,31.97.13.104,31.97.13.106}"
-: "${CORE_VPS:=145.223.73.4}"
+if [ -z "${NODES:-}" ] || [ -z "${CORE_VPS:-}" ]; then
+  echo "NODES and CORE_VPS must be set via environment or $CONFIG_FILE" >&2
+  exit 1
+fi
 IFS=',' read -r -a NODES <<< "$NODES"
 PORT=5044
 
