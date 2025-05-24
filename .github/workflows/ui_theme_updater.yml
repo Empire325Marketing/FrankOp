@@ -37,7 +37,9 @@ jobs:
           pip install -r requirements.txt || pip install fastapi uvicorn jinja2 aiofiles
 
           echo "🎨 UI Overhaul Triggered"
-          python3 .github/workflows/ui_theme_updater.yml || echo "[UI] Theme script not found—skip."
+          # Removed invalid attempt to run a YAML file as Python
+          # Previously: python3 .github/workflows/ui_theme_updater.yml
+          echo "[UI] Theme script not found—skip."
 
           echo "🚀 Restarting control server"
           pkill -f uvicorn || true
