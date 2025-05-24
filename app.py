@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 from trinity_ai import TrinityAI
 
 app = Flask(__name__)
+CORS(app)
 trinity = TrinityAI()
 
 
@@ -23,6 +25,18 @@ def chat() -> tuple:
     except Exception as exc:  # pragma: no cover - network failures
         return jsonify({"error": str(exc)}), 500
     return jsonify({"response": response})
+
+
+@app.route("/api/status", methods=["GET"])
+def status() -> tuple:
+    """Simple status endpoint for health checks."""
+    return jsonify({"status": "ok"})
+
+
+@app.route("/health", methods=["GET"])
+def health() -> tuple:
+    """Compatibility health check endpoint."""
+    return jsonify({"status": "healthy"})
 
 
 if __name__ == "__main__":  # pragma: no cover
