@@ -20,8 +20,8 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
     }
 
-    location /james {
-        proxy_pass http://${UI_HOST}:${UI_PORT};
+    location /james/ {
+        proxy_pass http://${UI_HOST}:${UI_PORT}/;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
     }

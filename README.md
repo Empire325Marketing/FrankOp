@@ -173,7 +173,8 @@ lines and any SSL directives if the certificate is absent, tests the configurati
 A minimal web interface is provided as a starting point for the future
 "ultimate" Trinity AI UI. The backend API is implemented with Flask in
 `app.py` and exposes a `/api/chat` endpoint. The production Next.js 14 frontend
-resides in `var/www/html/james/ultimate_ui/`.
+resides in `var/www/html/james/ultimate_ui/`. When served behind Nginx it is
+available from the `/james` path on your domain.
 
 ### Running locally
 
