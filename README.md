@@ -231,7 +231,11 @@ available from the `/james` path on your domain.
    npm run dev
    ```
 
-4. To build and serve the UI in production, execute:
+4. Create or edit the `.env.local` file in that directory and set
+   `NEXT_PUBLIC_API_URL` to the base URL of the backend, e.g.
+   `http://localhost:5001`.
+
+5. To build and serve the UI in production, execute:
    ```bash
    NODE_OPTIONS=--max-old-space-size=4096 npm run build
    npm run start

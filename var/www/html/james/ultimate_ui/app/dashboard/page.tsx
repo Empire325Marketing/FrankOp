@@ -1,11 +1,13 @@
 'use client';
 import { useEffect, useState } from 'react';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
+
 export default function Dashboard() {
   const [stats, setStats] = useState<any>(null);
 
   useEffect(() => {
-    fetch('/api/stats')
+    fetch(`${API_URL}/api/stats`)
       .then((res) => res.json())
       .then(setStats)
       .catch(() => setStats(null));
