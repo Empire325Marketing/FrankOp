@@ -7,10 +7,11 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
 
-SSH_USER = os.getenv("SSH_USER", "root")
-SSH_PASSWORD = os.getenv("SSH_PASSWORD")
-if not SSH_PASSWORD:
-    raise RuntimeError("SSH_PASSWORD environment variable not set")
+SSH_USER = "root"
+SSH_PASSWORD = ""
+NODES = []
+CORE_VPS = ""
+LOG_PATH = "/tmp/fb_combined.log"
 
 def load_addresses() -> None:
     """Populate NODES and CORE_VPS from a config file if unset."""
@@ -27,16 +28,6 @@ def load_addresses() -> None:
                     os.environ["CORE_VPS"] = line.split("=", 1)[1].strip().strip('"')
 
 
-load_addresses()
-
-nodes_env = os.getenv("NODES")
-core_vps = os.getenv("CORE_VPS")
-if not nodes_env or not core_vps:
-    raise RuntimeError("NODES and CORE_VPS must be set via environment or addresses.env")
-
-NODES = nodes_env.split(",")
-CORE_VPS = core_vps
-LOG_PATH = "/tmp/fb_combined.log"
 
 
 def log(msg: str) -> None:
@@ -77,6 +68,25 @@ def aggregator_has_tag(tag: str) -> bool:
 
 
 def main() -> None:
+    global SSH_USER, SSH_PASSWORD, NODES, CORE_VPS
+
+    SSH_USER = os.getenv("SSH_USER", "root")
+    SSH_PASSWORD = os.getenv("SSH_PASSWORD")
+    if not SSH_PASSWORD:
+        raise RuntimeError("SSH_PASSWORD environment variable not set")
+
+    load_addresses()
+
+    nodes_env = os.getenv("NODES")
+    core_vps = os.getenv("CORE_VPS")
+    if not nodes_env or not core_vps:
+        raise RuntimeError(
+            "NODES and CORE_VPS must be set via environment or addresses.env"
+        )
+
+    NODES = nodes_env.split(",")
+    CORE_VPS = core_vps
+
     tags: dict[str, str] = {}
     with ThreadPoolExecutor(max_workers=len(NODES)) as exe:
         futures = {}
