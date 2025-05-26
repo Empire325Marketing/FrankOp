@@ -92,7 +92,8 @@ Nginx and Fluent Bit configuration files use the variables `UI_HOST`,
 `UI_PORT`, `API_HOST`, `API_PORT` and `FLUENT_LISTEN_ADDR`. When deploying
 these configs you can apply `envsubst` to substitute the values. The SSL
 certificate lines in the provided Nginx configs are placeholders and should be
-replaced with real certificate paths:
+replaced with real certificate paths. `FLUENT_LISTEN_ADDR` defaults to
+`0.0.0.0` when running `scripts/runpod_tunnel_manager.sh`.
 
 ```bash
 envsubst < etc/nginx/sites-available/trinity-complete > /etc/nginx/sites-available/trinity-complete
@@ -109,6 +110,10 @@ To aggregate logs from remote VPS nodes using reverse SSH tunnels:
 ```bash
 scripts/runpod_tunnel_manager.sh
 ```
+
+   The script sets `FLUENT_LISTEN_ADDR` to `0.0.0.0` by default so the
+   Fluent Bit HTTP input listens on all interfaces. Override this environment
+   variable if you need the collector bound to a specific address.
 
 2. On each VPS node, establish a persistent tunnel using `autossh`.
    Specify the remote port assigned to the node when invoking the

@@ -24,6 +24,11 @@ main() {
   check_dependency fluent-bit
   check_dependency socat
 
+  # Allow overriding the listen address for the Fluent Bit HTTP input
+  # Default to 0.0.0.0 so it accepts connections from all forwarded ports
+  : "${FLUENT_LISTEN_ADDR:=0.0.0.0}"
+  export FLUENT_LISTEN_ADDR
+
   log "Starting Fluent Bit aggregator"
   fluent-bit -c fluent-bit/fluent-bit.conf &
   FLUENT_PID=$!
