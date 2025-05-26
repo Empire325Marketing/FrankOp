@@ -11,7 +11,8 @@ server {
     ssl_certificate_key /etc/letsencrypt/live/325automations.com/privkey.pem;
 
     location = / {
-        return 302 https://325automations.com/james/login;
+        root /var/www/html;
+        index index.html;
     }
 
     location / {
