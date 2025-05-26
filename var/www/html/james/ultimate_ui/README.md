@@ -16,8 +16,8 @@ It provides a basic chat interface that communicates with the Flask backend in
    ```
 
 The app expects the Flask API to be running on `http://localhost:5001`.
-Set `NEXT_PUBLIC_API_URL` in `.env.local` to point to this base URL so that
-`fetch` calls reach the correct backend during development.
+Copy `.env.local.example` to `.env.local` and set `NEXT_PUBLIC_API_URL` to this
+base URL so that `fetch` calls reach the correct backend during development.
 
 This project is configured with `basePath: '/james'` so assets are served under
 that URL segment. Update `next.config.js` if deploying elsewhere.
