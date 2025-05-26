@@ -2,6 +2,16 @@
 
 Automation utilities for deployment and monitoring of Fluent Bit and Filebeat across multiple nodes.
 
+## Prerequisites
+
+The deployment and tunnel scripts rely on `sshpass` for non-interactive SSH
+authentication. When setting up reverse SSH tunnels you will also need
+`autossh`. Install both tools on Debian-based systems with:
+
+```bash
+sudo apt-get install sshpass autossh
+```
+
 ## Required Environment Variables
 
 Before running the utilities or the web application, set the following environment variables:
