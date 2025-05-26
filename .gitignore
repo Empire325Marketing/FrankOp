@@ -5,6 +5,7 @@ node_modules/
 var/www/html/james/ultimate_ui/.next/
 .env
 var/www/html/james/ultimate_ui/.next/
+var/www/html/james/ultimate_ui/.env.local
 *.log
 
 etc/addresses.env

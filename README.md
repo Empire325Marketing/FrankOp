@@ -236,7 +236,7 @@ available from the `/james` path on your domain.
    npm run dev
    ```
 
-4. Create or edit the `.env.local` file in that directory and set
+4. Copy `.env.local.example` to `.env.local` in that directory and set
    `NEXT_PUBLIC_API_URL` to the base URL of the backend, e.g.
    `http://localhost:5001`.
 
