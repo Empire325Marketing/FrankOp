@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Join 325 Automations</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #f7fafc; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+  .form-container { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+  input, button { width: 100%; padding: 0.5rem; margin-top: 1rem; }
+  button { background: #4F46E5; color: white; border: none; border-radius: 4px; cursor: pointer; }
+</style>
+</head>
+<body>
+  <form class="form-container" action="http://145.223.73.4:5000/webhook" method="POST">
+    <h1>Get Updates From 325 Automations</h1>
+    <input type="text" name="name" placeholder="Your Name" required>
+    <input type="email" name="email" placeholder="Email Address" required>
+    <button type="submit">Submit</button>
+  </form>
+</body>
+</html>
