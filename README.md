@@ -131,7 +131,14 @@ scripts/runpod_tunnel_manager.sh
    nodes. Example for port 5045:
 
 ```bash
+# specify the RunPod host via environment variable
+export RUNPOD_HOST="root@<runpod-ip>"
 scripts/vps_tunnel_setup.sh 5045
+```
+Alternatively pass the host as a second argument:
+
+```bash
+scripts/vps_tunnel_setup.sh 5045 root@<runpod-ip>
 ```
 
 Filebeat on the VPS should be configured with
