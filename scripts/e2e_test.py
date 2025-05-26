@@ -11,7 +11,8 @@ SSH_USER = "root"
 SSH_PASSWORD = ""
 NODES = []
 CORE_VPS = ""
-LOG_PATH = "/tmp/fb_combined.log"
+# Combined log produced by fluent-bit on the core VPS
+LOG_PATH = "/tmp/vps_combined.log"
 
 def load_addresses() -> None:
     """Populate NODES and CORE_VPS from a config file if unset."""
