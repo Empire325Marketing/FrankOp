@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # vps_tunnel_setup.sh - Create a persistent SSH tunnel from a VPS node to RunPod
 #
-# Usage: vps_tunnel_setup.sh <remote_port>
+# Usage: vps_tunnel_setup.sh <remote_port> [runpod_host]
+# The host can also be provided via the RUNPOD_HOST environment variable.
 # Each VPS is assigned a unique remote_port. Example mapping:
 #   198.51.100.5 -> 5045
 #   192.0.2.10   -> 5046
@@ -17,13 +18,13 @@
 
 set -euo pipefail
 
-RUNPOD_HOST="root@d82c6a1a4730"
 RUNPOD_PORT=22
 SSH_PASSWORD="${SSH_PASSWORD:?SSH_PASSWORD environment variable not set}"
 LOCAL_PORT=5044
 
 usage() {
-  echo "Usage: $0 <remote_port>" >&2
+  echo "Usage: $0 <remote_port> [runpod_host]" >&2
+  echo "       Set RUNPOD_HOST env var or pass runpod_host as an argument." >&2
   exit 1
 }
 
@@ -31,10 +32,15 @@ check_dependency() {
   command -v "$1" >/dev/null 2>&1 || { echo "$1 is required" >&2; exit 1; }
 }
 
-if [ $# -ne 1 ]; then
+if [ $# -lt 1 ] || [ $# -gt 2 ]; then
   usage
 fi
 REMOTE_PORT=$1
+if [ $# -eq 2 ]; then
+  RUNPOD_HOST="$2"
+else
+  RUNPOD_HOST="${RUNPOD_HOST:?RUNPOD_HOST environment variable not set}"
+fi
 
 main() {
   check_dependency autossh
